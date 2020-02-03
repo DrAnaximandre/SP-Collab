@@ -1,0 +1,22 @@
+#Collab Test 2
+#Initiated by Davids Fiddle
+#Changed by ???
+
+
+use_bpm 68
+
+
+live_loop :g1 do
+  tick
+  sample :bass_trance_c, rpitch: (ring 0,4,4,7).choose, sustain: 1, release: 1
+  sample :guit_e_fifths, amp: 0.5, rate: (ring 0.5,1,1,1).choose if (bools 1,0).look
+  sample :guit_e_slide, amp: 0.5, rate: (ring 0.5,1,1,1).choose if (bools 0,1).look
+  sleep 2
+end
+
+#Just a suggestion
+live_loop :seven do
+  tick
+  sample :drum_cymbal_closed, release: 0.25, amp: (ring 2,1,1,1,2,1,1).look / 2.0
+  sleep 2/7.0
+end
