@@ -36,8 +36,7 @@ live_loop :mitch do
   use_synth :sine
   local_note =  get(:stored_note)
   mitch_notes =  [48,60,72,60 + local_note].ring
-  res_loc = 0.4
-  room_loc = 10
+
   with_fx :bitcrusher, bits:5, sample_rate:42000 do
     7.times do |j|
       mitch_pan = rrand(-1,1)
