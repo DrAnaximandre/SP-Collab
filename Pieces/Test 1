@@ -1,17 +1,26 @@
 #Collab Test 2
 #Initiated by Davids Fiddle
-#Collaborator: ???
+#Collaborator: Dranax, 
 
 
 use_bpm 68
 
+offsets = [0,4,4,7].ring
+
+live_loop :clock do
+  sleep 2
+  note = offsets.choose
+  set :stored_note,note
+end
 
 live_loop :g1 do
-  tick
-  sample :bass_trance_c, rpitch: (ring 0,4,4,7).choose, sustain: 1, release: 1
+  idx = tick
+  bob = sample :bass_trance_c, rpitch: get(:stored_note), sustain: 1, release: 1, cutoff:50
+  control bob, cutoff:130, cutoff_slide:2, cutoff_shape:3
   sample :guit_e_fifths, amp: 0.5, rate: (ring 0.5,1,1,1).choose if (bools 1,0).look
   sample :guit_e_slide, amp: 0.5, rate: (ring 0.5,1,1,1).choose if (bools 0,1).look
   sleep 2
+  
 end
 
 #Just a suggestion
@@ -19,4 +28,26 @@ live_loop :seven do
   tick
   sample :drum_cymbal_closed, release: 0.25, amp: (ring 2,1,1,1,2,1,1).look / 2.0
   sleep 2/7.0
+end
+
+
+live_loop :mitch do
+  idx = tick
+  use_synth :sine
+  local_note =  get(:stored_note)
+  mitch_notes =  [48,60,72,60 + local_note].ring
+  res_loc = 0.4
+  room_loc = 10
+  with_fx :bitcrusher, bits:5, sample_rate:42000 do
+    7.times do |j|
+      mitch_pan = rrand(-1,1)
+      if idx%3 == 0 and j==0
+        play_note = local_note + 84
+      else
+        play_note =  mitch_notes[j]
+      end
+      mitch = play play_note, amp: 0.15, attack:0.05, sustain:0.09,  release: 0.01, pan: mitch_pan,cutoff: 85+rrand(0,5)
+      sleep 2/7.0
+    end
+  end
 end
